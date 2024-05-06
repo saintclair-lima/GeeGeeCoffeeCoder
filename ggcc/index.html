@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeeGee CoffeeCoder</title>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');</style>
+    <style>
+        body {
+            background-color: #f0f0f0; /* Light gray background */
+            color: #333; /* Dark gray text */
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            font-family: 'Great Vibes', cursive; /* Curvy and delicate font */
+            background-color: #ffd9e6; /* Pastel pink */
+            padding: 20px;
+            text-align: center;
+        }
+        #icon {
+            border-radius: 50%; /* Make the image round */
+            width: 200px;
+            height: 200px;
+            border: 5px solid #ffcc80; /* Pastel orange border */
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script>
+      function onScanSuccess(decodedText, decodedResult) {
+        // referência de como enviar para o Google Docs
+        // https://stackoverflow.com/questions/71714110/can-you-submit-a-restful-request-to-a-google-forms-api
+        let url="https://docs.google.com/forms/d/e/1FAIpQLSc1ix09Sl5qF5Xq2dy1aJ7E0ijiklS6XYVggzgOG8aa6_b6Ng/formResponse?&submit=Submit?usp=pp_url&entry.1760853337=" + decodedText;
+
+        var link = document.createElement('a');
+        link.href = url;
+
+        link.addEventListener('click', function(event) {
+            link.parentNode.removeChild(link);
+        });
+        
+        var event = new MouseEvent('click');
+        link.dispatchEvent(event);
+        
+        // alert(`Código ${decodedText} lido e enviado à planilha`);
+      }
+      
+      function onScanFailure(error) {
+        console.warn(`Code scan error = ${error}`);
+      }
+    </script>
+  </head>
+  <body>
+  
+    <header>
+      <img id="icon" src="cup.jpg" alt="Coffee Cup">
+      <h1>GeeGee CoffeeCoder</h1>
+    </header>
+    <div class="content">
+      <div id="reader" width="100%"></div>
+    </div>
+    
+    <script>      
+      let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader",
+        { fps: 10, qrbox: {width: 200, height: 200} },
+        /* verbose= */ false);
+      html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+    
+  </body>
+</html>
