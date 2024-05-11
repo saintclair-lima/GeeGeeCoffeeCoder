@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeeGee CoffeeCoder</title>
@@ -11,6 +12,7 @@
             color: #333; /* Dark gray text */
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif; /* Fallback font */
         }
         header {
             font-family: 'Great Vibes', cursive; /* Curvy and delicate font */
@@ -28,13 +30,36 @@
             padding: 20px;
             text-align: center;
         }
+        
+        #botao {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            background-color: #ffcc80; /* Pastel orange */
+            color: #333; /* Dark gray text */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #codigo {
+            width: 200px;
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            background-color: #ccc; /* Pastel orange */
+            color: #333; /* Dark gray text */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script>
-      function onScanSuccess(decodedText, decodedResult) {
+    
+      function enviarCodigo(codigo){
         // referência de como enviar para o Google Docs
         // https://stackoverflow.com/questions/71714110/can-you-submit-a-restful-request-to-a-google-forms-api
-        let url="https://docs.google.com/forms/d/e/1FAIpQLSc1ix09Sl5qF5Xq2dy1aJ7E0ijiklS6XYVggzgOG8aa6_b6Ng/formResponse?&submit=Submit?usp=pp_url&entry.1760853337=" + decodedText;
+        let url="https://docs.google.com/forms/d/e/1FAIpQLSc1ix09Sl5qF5Xq2dy1aJ7E0ijiklS6XYVggzgOG8aa6_b6Ng/formResponse?&submit=Submit?usp=pp_url&entry.1760853337=" + codigo;
 
         var link = document.createElement('a');
         link.href = url;
@@ -45,12 +70,19 @@
         
         var event = new MouseEvent('click');
         link.dispatchEvent(event);
-        
-        // alert(`Código ${decodedText} lido e enviado à planilha`);
+      }
+      
+      function onScanSuccess(decodedText, decodedResult) {
+        enviarCodigo(decodedText);
       }
       
       function onScanFailure(error) {
         console.warn(`Code scan error = ${error}`);
+      }
+      
+      function enviarCodigoDigitado() {
+        var codigo = document.getElementById("codigo").value;
+        enviarCodigo(codigo);
       }
     </script>
   </head>
@@ -60,6 +92,7 @@
       <img id="icon" src="cup.jpg" alt="Coffee Cup">
       <h1>GeeGee CoffeeCoder</h1>
     </header>
+    
     <div class="content">
       <div id="reader" width="100%"></div>
     </div>
@@ -71,6 +104,11 @@
         /* verbose= */ false);
       html5QrcodeScanner.render(onScanSuccess, onScanFailure);
     </script>
+    
+    <div class="content">
+      <div><input type="text" id="codigo"/></div>
+      <div><button id="botao" onClick="enviarCodigoDigitado()">Enviar Código Digitado</button></div>
+    </div>
     
   </body>
 </html>
